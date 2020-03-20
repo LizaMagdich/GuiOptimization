@@ -92,7 +92,7 @@ void MainWindow::makePlot(){
                    break;
                }
                case 1:{
-                  z=x + y;
+                  z=0.1*cos(10*(x*x + y*y));
                    break;
                }
                case 2:{
@@ -269,7 +269,7 @@ void MainWindow::on_pushButton_Ok_clicked()
     ui->textBrowser->insertPlainText("\nargmin: (");
     num = QString::number(double(opt.argmin[0]));
     ui->textBrowser->insertPlainText(num);
-    ui->textBrowser->insertPlainText(";");
+    ui->textBrowser->insertPlainText(" ; ");
     num = QString::number(double(opt.argmin[1]));
     ui->textBrowser->insertPlainText(num);
     ui->textBrowser->insertPlainText(")");
@@ -280,6 +280,8 @@ void MainWindow::on_pushButton_Ok_clicked()
 
     ui->customPlot->QCustomPlot::removePlottable(pathGraph);
     ui->customPlot->QCustomPlot::removePlottable(finalPoint);
+
+
 
     delete area;
     delete func;
@@ -296,17 +298,32 @@ void MainWindow::mousePos(QMouseEvent* event)
 
 void MainWindow::mouseClick(QMouseEvent* event)
 {
+
+    ui->textBrowser->clear();
+
+
     ui->textBrowser->insertPlainText("\n");
-    ui->textBrowser->insertPlainText("M:");
+    ui->textBrowser->insertPlainText("Start point: (");
     QString num;
+
+
     ui->customPlot->mouseMove(event);
-    geomx = opt.rangeX1 + (opt.rangeX2-opt.rangeX1)*(double((event->x()) - 57.)/413);
-    geomy = opt.rangeY1 + (opt.rangeY2-opt.rangeY1)*(1 - double((event->y()) - 16.)/503);
+
+
+    geomx = opt.rangeX1 + (opt.rangeX2-opt.rangeX1)*(double((event->x()) - 50.)/401);
+    geomy = opt.rangeY1 + (opt.rangeX2-opt.rangeX1)*(1 - double((event->y())  - 14.)/619);
+
+    if(geomx < opt.rangeX1 || geomx > opt.rangeX2 || geomy < opt.rangeY1 || geomy > opt.rangeY2){
+       ui->textBrowser->clear();
+       ui->textBrowser->insertPlainText("Сlick on the plot.");
+    }else{
+
     num = QString::number(geomx);
     ui->textBrowser->insertPlainText(num);
-    ui->textBrowser->insertPlainText(" ");
+    ui->textBrowser->insertPlainText(" ; ");
     num = QString::number(geomy);
     ui->textBrowser->insertPlainText(num);
+    ui->textBrowser->insertPlainText(")");
     ui->textBrowser->insertPlainText("\n");
 
 
@@ -320,6 +337,7 @@ void MainWindow::mouseClick(QMouseEvent* event)
 
     MainWindow::on_pushButton_Ok_clicked();
 
+    }
 }
 
 
