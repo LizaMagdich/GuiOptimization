@@ -16,7 +16,6 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    connect(ui->customPlot, SIGNAL(mouseMove(QMouseEvent*)), this, SLOT(mousePos(QMouseEvent*)));
     connect(ui->customPlot, SIGNAL(mousePress(QMouseEvent*)), this, SLOT(mouseClick(QMouseEvent*)));
 
     opt.functionNumb = ui->comboBox_function->currentIndex();
@@ -85,26 +84,27 @@ void MainWindow::makePlot(){
         colorMap->data()->cellToCoord(xIndex, yIndex, &x, &y);
 
         Function * func = nullptr;
-
         switch(opt.functionNumb){
                case 0:{
-                     z=(x- 2)*(x - 2)*(x - 2)*(x - 2) + (x - 2*y)*(x - 2 *y);
+                   func = new F_1;
                    break;
                }
                case 1:{
-                  z=0.1*cos(10*(x*x + y*y));
+                   func = new F_2;
                    break;
                }
                case 2:{
-                   z=x*x + y*y;
+                   func = new F_3;
                    break;
                }
            }
+
         vector<double> vec;
         vec.push_back(x);
         vec.push_back(y);
-        delete func;
+        z = func->eval(vec);
         colorMap->data()->setCell(xIndex, yIndex, z);
+        delete func;
       }
     }
 
@@ -289,12 +289,6 @@ void MainWindow::on_pushButton_Ok_clicked()
     delete stopCrit;
 }
 
-
-
-void MainWindow::mousePos(QMouseEvent* event)
-{
-
-}
 
 void MainWindow::mouseClick(QMouseEvent* event)
 {

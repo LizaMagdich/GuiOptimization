@@ -17,10 +17,8 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
     OptData opt;
-    QMouseEvent* qme;
     double geomx;
     double geomy;
-
 
 private slots:
     void makePlot();
@@ -36,8 +34,6 @@ private slots:
     void on_comboBox_Stop_crit_SS_currentIndexChanged(int index);
 
     void on_comboBox_Area_currentIndexChanged(int index);
-
-    void mousePos(QMouseEvent* event);
 
     void mouseClick(QMouseEvent* event);
 
