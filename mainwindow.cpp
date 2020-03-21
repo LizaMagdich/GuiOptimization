@@ -73,6 +73,22 @@ void MainWindow::makePlot(){
     int nx = 200;
     int ny = 200;
 
+    Function * func = nullptr;
+    switch(opt.functionNumb){
+           case 0:{
+               func = new F_1;
+               break;
+           }
+           case 1:{
+               func = new F_2;
+               break;
+           }
+           case 2:{
+               func = new F_3;
+               break;
+           }
+       }
+
     colorMap->data()->setSize(nx, ny); // we want the color map to have nx * ny data points
     colorMap->data()->setRange(QCPRange(opt.rangeX1, opt.rangeX2), QCPRange(opt.rangeY1, opt.rangeY2)); // and span the coordinate range
     // now we assign some data, by accessing the QCPColorMapData instance of the color map:
@@ -82,31 +98,16 @@ void MainWindow::makePlot(){
       for (int yIndex=0; yIndex<ny; ++yIndex)
       {
         colorMap->data()->cellToCoord(xIndex, yIndex, &x, &y);
-
-        Function * func = nullptr;
-        switch(opt.functionNumb){
-               case 0:{
-                   func = new F_1;
-                   break;
-               }
-               case 1:{
-                   func = new F_2;
-                   break;
-               }
-               case 2:{
-                   func = new F_3;
-                   break;
-               }
-           }
-
         vector<double> vec;
         vec.push_back(x);
         vec.push_back(y);
         z = func->eval(vec);
         colorMap->data()->setCell(xIndex, yIndex, z);
-        delete func;
+
       }
     }
+
+    delete func;
 
     // add a color scale:
     QCPColorScale *colorScale = new QCPColorScale(ui->customPlot);
